@@ -1,0 +1,8 @@
+# This file is managed by puppet. Manual changes will be reverted on the next puppet run. 
+# Sync disks, unmount iSCSI volume, make unavailable LVM volume group
+echo "Syncing Disks..."
+sync
+echo "Unmounting iSCSI volume /mnt/canvasdata..."
+umount -v /mnt/canvasdata
+echo "Making /dev/vgiscsi Volume Group unavailable..."
+vgchange -a n /dev/vgiscsi

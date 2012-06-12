@@ -1,0 +1,6 @@
+upstream canvas {
+  #ip_hash;
+<% workers.each do |worker| -%>
+  server <%= worker %>:80;
+<% end -%>
+}

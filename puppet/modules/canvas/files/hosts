@@ -1,0 +1,21 @@
+# This files is managed by puppet. Manual changes will be reverted on the next puppet run
+# /etc/hosts: Local Host Database
+#
+# This file describes a number of aliases-to-address mappings for the for 
+# local hosts that share this file.
+#
+# In the presence of the domain name service or NIS, this file may not be 
+# consulted at all; see /etc/host.conf for the resolution order.
+#
+
+# IPv4 and IPv6 localhost aliases
+127.0.0.1       localhost
+::1             localhost
+
+# Add your canvas hosts here
+1.1.1.1      canvas1.example.com canvas1
+1.1.1.2      canvas2.example.com canvas1
+1.1.1.3	     puppet.example.com puppet
+1.1.1.4	     canvasdev.example.com canvasdev
+1.1.1.5	     canvasweb.example.com canvasweb
+

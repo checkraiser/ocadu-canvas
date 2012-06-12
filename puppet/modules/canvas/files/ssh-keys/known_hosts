@@ -1,0 +1,2 @@
+# This file is managed by puppet. Manual changes will be reverted on the next puppet run.
+# Known hosts go here. Include all hosts in your canvas environment including puppet server

@@ -1,0 +1,77 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# Assumes Nginx was installed by ModRails and lives in /opt/nginx
+# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/files/nginx-r1,v 1.1 2006/07/04 16:58:38 voxus Exp $
+
+# This file is managed by puppet. Manual changes will be reverted on the next puppet run.
+
+extra_commands="configtest"
+extra_started_commands="upgrade reload configtest"
+
+#opts="${opts} upgrade reload configtest"
+
+depend() {
+  need net
+  use dns logger
+}
+
+start() {
+  configtest || return 1
+  ebegin "Starting nginx"
+  start-stop-daemon --start --pidfile /opt/nginx/logs/nginx.pid \
+    --exec /opt/nginx/sbin/nginx -- -c /opt/nginx/conf/nginx.conf
+  eend $? "Failed to start nginx"
+}
+
+stop() {
+  configtest || return 1
+  ebegin "Stopping nginx"
+  start-stop-daemon --stop --pidfile /opt/nginx/logs/nginx.pid
+  eend $? "Failed to stop nginx"
+  rm -f /opt/nginx/logs/nginx.pid
+}
+
+reload() {
+  configtest || return 1
+  ebegin "Refreshing nginx' configuration"
+  kill -HUP `cat /opt/nginx/logs/nginx.pid` &>/dev/null
+  eend $? "Failed to reload nginx"
+}
+
+upgrade() {
+  configtest || return 1
+  ebegin "Upgrading nginx"
+
+  einfo "Sending USR2 to old binary"
+  kill -USR2 `cat /opt/nginx/logs/nginx.pid` &>/dev/null
+
+  einfo "Sleeping 3 seconds before pid-files checking"
+  sleep 3
+
+  if [ ! -f /opt/nginx/logs/nginx.pid.oldbin ]; then
+    eerror "File with old pid not found"
+    return 1
+  fi
+
+  if [ ! -f /opt/nginx/logs/nginx.pid ]; then
+    eerror "New binary failed to start"
+    return 1
+  fi
+
+  einfo "Sleeping 3 seconds before WINCH"
+  sleep 3 ; kill -WINCH `cat /opt/nginx/logs/nginx.pid.oldbin`
+
+  einfo "Sending QUIT to old binary"
+  kill -QUIT `cat /opt/nginx/logs/nginx.pid.oldbin`
+
+  einfo "Upgrade completed"
+
+  eend $? "Upgrade failed"
+}
+
+configtest() {
+  ebegin "Checking nginx' configuration"
+  /opt/nginx/sbin/nginx -c /opt/nginx/conf/nginx.conf -t
+  eend $? "failed, please correct errors above"
+}

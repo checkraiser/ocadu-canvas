@@ -1,0 +1,32 @@
+# This file is managed by puppet. Manual changes will be reverted on the next puppet run.
+
+/var/rails/canvas/shared/log/*.log {
+ 	missingok
+ 	notifempty
+	sharedscripts
+	size 2M
+	nocompress
+	su canvas canvas
+	postrotate
+		touch /var/rails/canvas/current/restart.txt
+	endscript
+}
+
+/opt/nginx/logs/*.log {
+	missingok
+	notifempty
+	sharedscripts
+	size 2M
+	nocompress
+	postrotate
+		test -r /opt/nginx/logs/nginx.pid && kill -USR1 `cat /opt/nginx/logs/nginx.pid`
+	endscript
+}
+
+/var/log/redis/*.log {
+ 	missingok
+	notifempty
+	sharedscripts
+	size 2M
+	nocompress
+}

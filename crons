@@ -1,0 +1,11 @@
+# Kills passenger instances if they get too big
+* * * * * /bin/kill -9 `/usr/bin/passenger-memory-stats 2>/dev/null | /bin/awk -vORS=" " '/Rack/{if($4 > 550) print $1}'` 2>/dev/null
+
+# Kills orphaned passenger instances
+* * * * * /bin/kill -9 `/usr/bin/passenger-memory-stats 2>/dev/null | /bin/awk '/Rack/{print $1}' | /bin/egrep -e $(/usr/bin/passenger-status | /bin/awk -vORS=" -e" '/PID/{print $3}') xxx -v | /bin/awk -vORS=" " '{print $1}'` 2>/dev/null
+
+# Kills orphaned delayed-jobs workers
+* * * * * /bin/kill -9 `/bin/ps -elf 2>/dev/null | /bin/awk '{if ($5 == 1 && $3 != "root") {print $0}}' | /bin/grep delayed:run | /bin/awk '{print $4}'` 2>/dev/null
+
+# Clears swap if possible
+*/5 * * * * [ `free|awk '/Mem:/{print $4}'` > `free|awk '/Swap:/{print $3}'` -a `free|awk '/Swap:/{print $3}'` > 0 ] && (swapoff -a && swapon -a)

@@ -1,0 +1,5 @@
+# This file is managed by puppet. Manual changes will be reverted on the next puppet run. 
+# Make new iSCSI LVM volume group available, and mount
+echo "Mounting iSCSI LVM volume /dev/vgiscsi/canvasdata to /mnt/canvasdata..."
+vgchange -a y /dev/vgiscsi
+mount -v /mnt/canvasdata

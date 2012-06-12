@@ -1,0 +1,63 @@
+#This file is managed by puppet. Manual changes will be reverted on the next puppet run.
+# New Relic Server Monitor configuration file.
+#
+# Option : license_key
+# Value  : 40-character hexadecimal string provided by New Relic. This is
+#          required in order for the server monitor to start.
+# Default: none
+#
+license_key=<%= license_key %>
+
+# Option : loglevel
+# Value  : Level of detail you want in the log file (as defined by the logfile
+#          setting below. Valid values are (in increasing levels of verbosity):
+#          error        - show errors only
+#          warning      - show errors and warnings
+#          info         - show minimal additional information messages
+#          verbose      - show more detailed information messages
+#          debug        - show debug messages
+#          verbosedebug - show very detailed debug messages
+loglevel=error
+
+# Option : logfile
+# Value  : Name of the file where the server monitor will store it's log
+#          messages. The amount of detail stored in this file is controlled
+#          by the loglevel option (above).
+logfile=/var/log/newrelic/nrsysmond.log
+
+# Option : ssl
+# Value  : Whether or not to use the Secure Sockets Layer (SSL) for all
+#          communication with the New Relic collector. Possible values are
+#          true/on or false/off. In certain rare cases you may need to modify
+#          the SSL certificates settings below.
+ssl=true
+
+# Option : ssl_ca_bundle
+# Value  : The name of a PEM-encoded Certificate Authority (CA) bundle to use
+#          for SSL connections. This very rarely needs to be set. The monitor
+#          will attempt to find the bundle in the most common locations. If
+#          you need to use SSL and the monitor is unable to locate a CA bundle
+#          then either set this value or the ssl_ca_path option below.
+# Default: /etc/ssl/certs/ca-certificates.crt or
+#          /etc/pki/tls/certs/ca-bundle.crt
+# Note   : Can also be set with the -b command line option.
+#
+#ssl_ca_bundle=/path/to/your/bundle.crt
+
+# Option : ssl_ca_path
+# Value  : If your SSL installation does not use CA bundles, but rather has a
+#          directory with PEM-encoded Certificate Authority files, set this
+#          option to the name of the directory that contains all the CA files.
+# Default: /etc/ssl/certs
+# Note   : Can also be set with the -S command line option.
+#
+#ssl_ca_path=/etc/ssl/certs
+
+
+# Option : pidfile
+# Value  : Name of a file where the server monitoring daemon will store it's
+#          process ID (PID). This is used by the startup and shutdown script
+#          to determine if the monitor is already running, and to start it up
+#          or shut it down.
+pidfile=/var/run/newrelic/nrsysmond.pid
+
